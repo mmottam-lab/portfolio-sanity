@@ -1,26 +1,311 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ─── CENTRO IA palette ─────────────────────────────────────── */
+  --bg-primary: #0E0E13;
+  --bg-secondary: rgb(25, 26, 35);
+  --bg-tertiary: rgb(30, 31, 42);
+  --text-primary: rgb(255, 250, 234);
+  --text-secondary: rgb(216, 215, 212);
+  --text-muted: rgb(140, 139, 135);
+  --text-dim: rgb(90, 89, 85);
+  --accent: rgb(98, 246, 181);
+  --accent-dim: rgba(98, 246, 181, 0.15);
+  --accent-glow: rgba(98, 246, 181, 0.08);
+  --border: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(255, 255, 255, 0.12);
+  --blue-glow: rgba(80, 120, 255, 0.06);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ─── Base ──────────────────────────────────────────────────────── */
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-geist-mono), "Geist Mono", "Geist Mono Fallback", monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Season Sans for headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-season), "Season Sans", system-ui, sans-serif;
+  font-weight: 400;
+  color: var(--text-primary);
+}
+
+/* Body text in Season Sans */
+p,
+.font-display {
+  font-family: var(--font-season), "Season Sans", system-ui, sans-serif;
+  font-weight: 300;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* ─── Selection ─────────────────────────────────────────────────── */
+::selection {
+  background-color: rgba(98, 246, 181, 0.25);
+  color: white;
+}
+
+/* ─── Utilities ─────────────────────────────────────────────────── */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ─── Grid background ───────────────────────────────────────────── */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* ─── Inner blue vignette ───────────────────────────────────────── */
+.centro-glow {
+  position: relative;
+}
+
+.centro-glow::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background: radial-gradient(ellipse at 50% 0%, rgba(80, 120, 255, 0.07) 0%, transparent 60%);
+}
+
+/* ─── Capsule buttons ───────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.5rem;
+  border-radius: 9999px;
+  background: var(--accent);
+  color: #0E0E13;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: rgb(120, 255, 200);
+  box-shadow: 0 0 30px rgba(98, 246, 181, 0.25);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.5rem;
+  border-radius: 9999px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* ─── Status badges ─────────────────────────────────────────────── */
+.status-active {
+  background: rgba(98, 246, 181, 0.1);
+  color: rgb(98, 246, 181);
+  border: 1px solid rgba(98, 246, 181, 0.2);
+}
+
+.status-completed {
+  background: rgba(98, 246, 181, 0.1);
+  color: #62F6B5;
+  border: 1px solid rgba(98, 246, 181, 0.2);
+}
+
+.status-planned {
+  background: rgba(168, 85, 247, 0.1);
+  color: #a855f7;
+  border: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.status-in-progress {
+  background: rgba(245, 178, 50, 0.1);
+  color: #F5B232;
+  border: 1px solid rgba(245, 178, 50, 0.2);
+}
+
+.status-on-hold {
+  background: rgba(140, 139, 135, 0.1);
+  color: #8C8B87;
+  border: 1px solid rgba(140, 139, 135, 0.2);
+}
+
+/* ─── Card style ────────────────────────────────────────────────── */
+.centro-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  transition: all 0.4s ease;
+}
+
+.centro-card:hover {
+  border-color: var(--border-hover);
+  background: var(--bg-tertiary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* ─── Monospace label ───────────────────────────────────────────── */
+.mono-label {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* ─── Animations ────────────────────────────────────────────────── */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes pulse-slow {
+
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+}
+
+.animate-fade-in-up-delay-1 {
+  animation: fade-in-up 0.8s ease-out 0.1s forwards;
+  opacity: 0;
+}
+
+.animate-fade-in-up-delay-2 {
+  animation: fade-in-up 0.8s ease-out 0.2s forwards;
+  opacity: 0;
+}
+
+.animate-fade-in-up-delay-3 {
+  animation: fade-in-up 0.8s ease-out 0.3s forwards;
+  opacity: 0;
+}
+
+/* ─── Glow effects ──────────────────────────────────────────────── */
+.glow-accent {
+  box-shadow: 0 0 60px rgba(98, 246, 181, 0.12), 0 0 120px rgba(98, 246, 181, 0.04);
+}
+
+/* ─── Input fields ──────────────────────────────────────────────── */
+.centro-input {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.3s ease;
+  font-family: var(--font-season), sans-serif;
+}
+
+.centro-input::placeholder {
+  color: var(--text-dim);
+}
+
+.centro-input:focus {
+  border-color: rgba(98, 246, 181, 0.3);
+  background: var(--bg-tertiary);
+  box-shadow: 0 0 0 3px rgba(98, 246, 181, 0.05);
 }

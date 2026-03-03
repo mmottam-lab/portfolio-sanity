@@ -1,0 +1,58 @@
+services:
+  # ── Next.js frontend ───────────────────────────────────────────────
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_SANITY_PROJECT_ID: hqsu9jrl
+        NEXT_PUBLIC_SANITY_DATASET: production
+        NEXT_PUBLIC_SANITY_API_VERSION: "2026-03-02"
+        NEXT_PUBLIC_API_URL: http://api:4000
+    ports:
+      - "3000:3000"
+    env_file: .env.local
+    environment:
+      - NEXT_PUBLIC_API_URL=http://api:4000
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ── Fastify API ────────────────────────────────────────────────────
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+      DATABASE_URL: postgres://centro:centro@db:5432/centro_db
+      CORS_ORIGIN: http://localhost:3000
+      PORT: "4000"
+      NODE_ENV: production
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ── PostgreSQL ─────────────────────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: centro
+      POSTGRES_PASSWORD: centro
+      POSTGRES_DB: centro_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U centro -d centro_db" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  pgdata:
