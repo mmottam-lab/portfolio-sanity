@@ -74,6 +74,7 @@ export interface RoadmapItem {
     status: "planned" | "in-progress" | "completed" | "on-hold";
     progress: number;
     color: string | null;
+    category: string | null;
     initiative: { _id: string; title: string } | null;
 }
 
@@ -185,8 +186,8 @@ export async function getCase(slug: string): Promise<CaseStudy> {
 
 export async function getRoadmap(): Promise<RoadmapItem[]> {
     return client.fetch(
-        `*[_type == "roadmapItem"] | order(startDate asc) {
-      _id, title, description, startDate, endDate, status, progress, color,
+        `*[_type == "roadmapItem"] | order(category asc, startDate asc) {
+      _id, title, description, startDate, endDate, status, progress, color, category,
       initiative->{_id, title}
     }`,
         {},

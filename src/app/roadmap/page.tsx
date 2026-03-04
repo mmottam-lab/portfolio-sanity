@@ -149,57 +149,106 @@ export default async function RoadmapPage() {
                                 </div>
                             </div>
 
-                            {/* Rows */}
-                            {items.map((item) => (
-                                <div key={item._id} className="flex">
-                                    {/* Label */}
-                                    <div className="shrink-0 w-56 border-r border-white/[0.06] px-4 flex items-center h-14 border-b border-white/[0.03]">
-                                        <div className="min-w-0">
-                                            <div className="text-[12px] font-semibold truncate" style={{ color: "rgb(255, 250, 234)" }}>
-                                                {item.title}
+                            {/* Rows — grouped by category */}
+                            {(() => {
+                                // Group items by category
+                                const groups: Record<string, RoadmapItem[]> = {};
+                                for (const item of items) {
+                                    const cat = item.category || "Uncategorized";
+                                    if (!groups[cat]) groups[cat] = [];
+                                    groups[cat].push(item);
+                                }
+                                const categoryOrder = ["Workshops", "Platforms", "Research", "Infrastructure", "Other", "Uncategorized"];
+                                const sortedCategories = Object.keys(groups).sort(
+                                    (a, b) => (categoryOrder.indexOf(a) === -1 ? 99 : categoryOrder.indexOf(a)) - (categoryOrder.indexOf(b) === -1 ? 99 : categoryOrder.indexOf(b))
+                                );
+
+                                return sortedCategories.map((cat) => (
+                                    <div key={cat}>
+                                        {/* Category header */}
+                                        <div className="flex border-b border-white/[0.06] bg-white/[0.03]">
+                                            <div className="shrink-0 w-56 border-r border-white/[0.06] px-4 py-2 flex items-center gap-2">
+                                                <span className="h-2 w-2 rounded-full" style={{ background: "rgb(98, 246, 181)" }} />
+                                                <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: "rgb(216, 215, 212)" }}>
+                                                    {cat}
+                                                </span>
+                                                <span className="text-[9px] font-[family-name:var(--font-geist-mono)] ml-1" style={{ color: "rgb(90, 89, 85)" }}>
+                                                    ({groups[cat].length})
+                                                </span>
                                             </div>
-                                            {item.initiative && (
-                                                <div className="text-[9px] font-[family-name:var(--font-geist-mono)] truncate" style={{ color: "rgb(90, 89, 85)" }}>
-                                                    {item.initiative.title}
+                                            <div className="flex-1 relative">
+                                                {/* Grid lines in header */}
+                                                <div className="absolute inset-0 flex pointer-events-none">
+                                                    {months.map((m, i) => {
+                                                        const mStartMs = Math.max(m.start.getTime(), padStart.getTime());
+                                                        const mEndMs = Math.min(m.end.getTime(), padEnd.getTime());
+                                                        const widthPct = ((mEndMs - mStartMs) / (padEnd.getTime() - padStart.getTime())) * 100;
+                                                        return (
+                                                            <div
+                                                                key={i}
+                                                                className="border-r border-white/[0.04] h-full"
+                                                                style={{ width: `${widthPct}%` }}
+                                                            />
+                                                        );
+                                                    })}
                                                 </div>
-                                            )}
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    {/* Gantt area */}
-                                    <div className="flex-1 relative">
-                                        {/* Month grid lines */}
-                                        <div className="absolute inset-0 flex pointer-events-none">
-                                            {months.map((m, i) => {
-                                                const mStartMs = Math.max(m.start.getTime(), padStart.getTime());
-                                                const mEndMs = Math.min(m.end.getTime(), padEnd.getTime());
-                                                const widthPct = ((mEndMs - mStartMs) / (padEnd.getTime() - padStart.getTime())) * 100;
-                                                return (
-                                                    <div
-                                                        key={i}
-                                                        className="border-r border-white/[0.04] h-full"
-                                                        style={{ width: `${widthPct}%` }}
+                                        {/* Items in this category */}
+                                        {groups[cat].map((item) => (
+                                            <div key={item._id} className="flex">
+                                                {/* Label */}
+                                                <div className="shrink-0 w-56 border-r border-white/[0.06] px-4 flex items-center h-14 border-b border-white/[0.03]">
+                                                    <div className="min-w-0 pl-3">
+                                                        <div className="text-[12px] font-semibold truncate" style={{ color: "rgb(255, 250, 234)" }}>
+                                                            {item.title}
+                                                        </div>
+                                                        {item.initiative && (
+                                                            <div className="text-[9px] font-[family-name:var(--font-geist-mono)] truncate" style={{ color: "rgb(90, 89, 85)" }}>
+                                                                {item.initiative.title}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                {/* Gantt area */}
+                                                <div className="flex-1 relative">
+                                                    {/* Month grid lines */}
+                                                    <div className="absolute inset-0 flex pointer-events-none">
+                                                        {months.map((m, i) => {
+                                                            const mStartMs = Math.max(m.start.getTime(), padStart.getTime());
+                                                            const mEndMs = Math.min(m.end.getTime(), padEnd.getTime());
+                                                            const widthPct = ((mEndMs - mStartMs) / (padEnd.getTime() - padStart.getTime())) * 100;
+                                                            return (
+                                                                <div
+                                                                    key={i}
+                                                                    className="border-r border-white/[0.04] h-full"
+                                                                    style={{ width: `${widthPct}%` }}
+                                                                />
+                                                            );
+                                                        })}
+                                                    </div>
+
+                                                    {/* Today line */}
+                                                    {todayPct >= 0 && todayPct <= 100 && (
+                                                        <div
+                                                            className="absolute top-0 bottom-0 w-px bg-red-400/40 z-10"
+                                                            style={{ left: `${todayPct}%` }}
+                                                        />
+                                                    )}
+
+                                                    <GanttBar
+                                                        item={item}
+                                                        timelineStart={timelineStart}
+                                                        totalDays={totalDays}
                                                     />
-                                                );
-                                            })}
-                                        </div>
-
-                                        {/* Today line */}
-                                        {todayPct >= 0 && todayPct <= 100 && (
-                                            <div
-                                                className="absolute top-0 bottom-0 w-px bg-red-400/40 z-10"
-                                                style={{ left: `${todayPct}%` }}
-                                            />
-                                        )}
-
-                                        <GanttBar
-                                            item={item}
-                                            timelineStart={timelineStart}
-                                            totalDays={totalDays}
-                                        />
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
-                                </div>
-                            ))}
+                                ));
+                            })()}
                         </div>
                     </div>
                 </div>

@@ -25,6 +25,21 @@ export default defineType({
             description: "The initiative this roadmap item belongs to (optional).",
         }),
         defineField({
+            name: "category",
+            title: "Category",
+            type: "string",
+            description: "Group label for the Gantt chart (e.g. Workshops, Platforms, Research).",
+            options: {
+                list: [
+                    { title: "Workshops", value: "Workshops" },
+                    { title: "Platforms", value: "Platforms" },
+                    { title: "Research", value: "Research" },
+                    { title: "Infrastructure", value: "Infrastructure" },
+                    { title: "Other", value: "Other" },
+                ],
+            },
+        }),
+        defineField({
             name: "startDate",
             title: "Start Date",
             type: "date",
