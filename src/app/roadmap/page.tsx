@@ -149,31 +149,32 @@ export default async function RoadmapPage() {
                                 </div>
                             </div>
 
-                            {/* Rows — grouped by category */}
+                            {/* Rows — grouped by initiative */}
                             {(() => {
-                                // Group items by category
                                 const groups: Record<string, RoadmapItem[]> = {};
                                 for (const item of items) {
-                                    const cat = item.category || "Uncategorized";
-                                    if (!groups[cat]) groups[cat] = [];
-                                    groups[cat].push(item);
+                                    const group = item.initiative?.title || "Other";
+                                    if (!groups[group]) groups[group] = [];
+                                    groups[group].push(item);
                                 }
-                                const categoryOrder = ["Workshops", "Platforms", "Research", "Infrastructure", "Other", "Uncategorized"];
-                                const sortedCategories = Object.keys(groups).sort(
-                                    (a, b) => (categoryOrder.indexOf(a) === -1 ? 99 : categoryOrder.indexOf(a)) - (categoryOrder.indexOf(b) === -1 ? 99 : categoryOrder.indexOf(b))
-                                );
+                                // Sort: named initiatives first (alphabetically), "Other" last
+                                const sortedGroups = Object.keys(groups).sort((a, b) => {
+                                    if (a === "Other") return 1;
+                                    if (b === "Other") return -1;
+                                    return a.localeCompare(b);
+                                });
 
-                                return sortedCategories.map((cat) => (
-                                    <div key={cat}>
-                                        {/* Category header */}
+                                return sortedGroups.map((group) => (
+                                    <div key={group}>
+                                        {/* Initiative header */}
                                         <div className="flex border-b border-white/[0.06] bg-white/[0.03]">
                                             <div className="shrink-0 w-56 border-r border-white/[0.06] px-4 py-2 flex items-center gap-2">
                                                 <span className="h-2 w-2 rounded-full" style={{ background: "rgb(98, 246, 181)" }} />
                                                 <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: "rgb(216, 215, 212)" }}>
-                                                    {cat}
+                                                    {group}
                                                 </span>
                                                 <span className="text-[9px] font-[family-name:var(--font-geist-mono)] ml-1" style={{ color: "rgb(90, 89, 85)" }}>
-                                                    ({groups[cat].length})
+                                                    ({groups[group].length})
                                                 </span>
                                             </div>
                                             <div className="flex-1 relative">
@@ -195,8 +196,8 @@ export default async function RoadmapPage() {
                                             </div>
                                         </div>
 
-                                        {/* Items in this category */}
-                                        {groups[cat].map((item) => (
+                                        {/* Items in this initiative */}
+                                        {groups[group].map((item) => (
                                             <div key={item._id} className="flex">
                                                 {/* Label */}
                                                 <div className="shrink-0 w-56 border-r border-white/[0.06] px-4 flex items-center h-14 border-b border-white/[0.03]">

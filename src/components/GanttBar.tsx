@@ -11,7 +11,6 @@ interface RoadmapItemData {
     status: "planned" | "in-progress" | "completed" | "on-hold";
     progress: number;
     color: string | null;
-    category: string | null;
     initiative: { _id: string; title: string } | null;
 }
 
