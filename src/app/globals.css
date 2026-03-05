@@ -309,3 +309,212 @@ html {
   background: var(--bg-tertiary);
   box-shadow: 0 0 0 3px rgba(98, 246, 181, 0.05);
 }
+
+/* ─── Studio Login Page ─────────────────────────────────────────── */
+.studio-login-page {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--bg-primary);
+}
+
+.studio-login-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.studio-login-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.studio-login-glow-top {
+  position: absolute;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 500px;
+  background: radial-gradient(ellipse at center,
+      rgba(98, 246, 181, 0.08) 0%,
+      rgba(80, 120, 255, 0.04) 40%,
+      transparent 70%);
+  filter: blur(60px);
+}
+
+.studio-login-glow-bottom {
+  position: absolute;
+  bottom: -300px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 400px;
+  background: radial-gradient(ellipse at center,
+      rgba(80, 120, 255, 0.06) 0%,
+      transparent 60%);
+  filter: blur(80px);
+}
+
+.studio-login-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  animation: fade-in-up 0.6s ease-out;
+}
+
+.studio-login-brand {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.studio-login-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 1rem;
+  background: rgba(98, 246, 181, 0.08);
+  border: 1px solid rgba(98, 246, 181, 0.15);
+  color: var(--accent);
+  margin-bottom: 1.25rem;
+  box-shadow: 0 0 40px rgba(98, 246, 181, 0.08);
+}
+
+.studio-login-title {
+  font-family: var(--font-season), "Season Sans", system-ui, sans-serif;
+  font-size: 1.75rem;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.studio-login-subtitle {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+}
+
+.studio-login-card {
+  background: rgba(25, 26, 35, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  transition: border-color 0.3s ease;
+}
+
+.studio-login-card:hover,
+.studio-login-card:focus-within {
+  border-color: var(--border-hover);
+}
+
+.studio-login-error {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: rgba(255, 85, 85, 0.08);
+  border: 1px solid rgba(255, 85, 85, 0.2);
+  color: #ff6b6b;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.8125rem;
+  animation: fade-in-up 0.3s ease-out;
+}
+
+.studio-login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.studio-login-label {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.studio-login-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  margin-top: 0.5rem;
+  border-radius: 0.75rem;
+  background: var(--accent);
+  color: #0E0E13;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.studio-login-button:hover:not(:disabled) {
+  background: rgb(120, 255, 200);
+  box-shadow: 0 0 30px rgba(98, 246, 181, 0.3);
+  transform: translateY(-1px);
+}
+
+.studio-login-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.studio-login-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.studio-login-spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(14, 14, 19, 0.3);
+  border-top-color: #0E0E13;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.studio-login-footer {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.6875rem;
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+}

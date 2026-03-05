@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { GeistMono } from "geist/font/mono";
 import localFont from "next/font/local";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import ConditionalLayout from "@/components/ConditionalLayout";
 import PageViewTracker from "@/components/PageViewTracker";
 
 const seasonSans = localFont({
@@ -61,10 +60,10 @@ export default function RootLayout({
   return (
     <html lang="es" className={`${GeistMono.variable} ${seasonSans.variable}`}>
       <body className="min-h-screen antialiased">
-        <Navbar />
         <PageViewTracker />
-        <main className="pt-16">{children}</main>
-        <Footer />
+        <ConditionalLayout>
+          {children}
+        </ConditionalLayout>
       </body>
     </html>
   );
