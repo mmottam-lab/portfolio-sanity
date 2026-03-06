@@ -53,7 +53,7 @@ export function middleware(request: NextRequest) {
     if (isPublicPath(pathname)) {
         // If already authenticated and trying to access /login, redirect to home
         if (pathname === "/login" && isAuthenticated(request)) {
-            return NextResponse.redirect(new URL("/", request.url));
+            return NextResponse.redirect(new URL("/cases", request.url));
         }
         return NextResponse.next();
     }

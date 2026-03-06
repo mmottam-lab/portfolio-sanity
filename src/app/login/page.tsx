@@ -25,7 +25,7 @@ export default function LoginPage() {
             const data = await res.json();
 
             if (res.ok && data.success) {
-                router.push("/");
+                router.push("/cases");
             } else {
                 setError(data.error || "Invalid credentials");
             }
