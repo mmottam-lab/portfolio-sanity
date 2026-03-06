@@ -62,6 +62,18 @@ export default defineType({
                 },
                 { type: "image", options: { hotspot: true } },
                 { type: "code", title: "Code Block" },
+                {
+                    type: "file",
+                    title: "Documento PDF",
+                    options: { accept: ".pdf" },
+                    fields: [
+                        {
+                            name: "description",
+                            title: "Descripción del documento",
+                            type: "string",
+                        },
+                    ],
+                },
             ],
         }),
         defineField({

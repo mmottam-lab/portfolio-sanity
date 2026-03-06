@@ -38,7 +38,7 @@ export default async function InitiativesPage() {
                     AI Initiatives
                 </h1>
                 <p className="mt-4 text-[15px] max-w-2xl leading-relaxed" style={{ color: "rgb(140, 139, 135)" }}>
-                    All AI-powered projects at CENTRO. From research and development to full deployment across the educational ecosystem.
+                    All AI-powered projects at CENTRO. From research and development to full deployment across the creative educational ecosystem.
                 </p>
             </div>
 

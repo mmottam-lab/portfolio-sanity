@@ -30,7 +30,7 @@ export default function Hero() {
                 {/* Subtitle */}
                 <p className="animate-fade-in-up-delay-2 mt-6 text-lg sm:text-xl leading-relaxed max-w-2xl mx-auto" style={{ color: "rgb(140, 139, 135)" }}>
                     Documenting AI initiatives, case studies, and our roadmap
-                    for CENTRO&apos;s educational ecosystem.
+                    for CENTRO&apos;s creative ecosystem.
                 </p>
 
                 {/* CTAs — capsule buttons */}
