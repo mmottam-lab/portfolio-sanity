@@ -33,6 +33,8 @@ export interface CaseStudy {
     slug: { current: string };
     description: string;
     mainImage: any;
+    video: any;
+    videoUrl: string;
     body: any[];
     initiative: { _id: string; title: string; slug: { current: string } } | null;
     results: string;
@@ -58,6 +60,8 @@ export interface Project {
     slug: { current: string };
     description: string;
     mainImage: any;
+    video: any;
+    videoUrl: string;
     body: any[];
     status: "active" | "completed" | "paused" | "planned";
     url: string;
@@ -126,7 +130,7 @@ export async function getInitiativeWithHierarchy(slug: string) {
         `*[_type == "subcategory" && initiative._ref == $initiativeId] | order(order asc) {
       _id, title, slug, description, icon, order,
       "projects": *[_type == "project" && subcategory._ref == ^._id] | order(order asc) {
-        _id, title, slug, description, mainImage, status, url, technologies, order
+        _id, title, slug, description, mainImage, video, videoUrl, status, url, technologies, order
       }
     }`,
         { initiativeId: initiative._id },
@@ -152,7 +156,7 @@ export async function getSubcategoriesByInitiative(initiativeId: string): Promis
 export async function getProjectsBySubcategory(subcategoryId: string): Promise<Project[]> {
     return client.fetch(
         `*[_type == "project" && subcategory._ref == $subcategoryId] | order(order asc) {
-      _id, title, slug, description, mainImage, body, status, url, technologies, order
+      _id, title, slug, description, mainImage, video, videoUrl, body, status, url, technologies, order
     }`,
         { subcategoryId },
         fetchOptions
@@ -162,7 +166,7 @@ export async function getProjectsBySubcategory(subcategoryId: string): Promise<P
 export async function getCases(): Promise<CaseStudy[]> {
     return client.fetch(
         `*[_type == "case"] | order(publishedAt desc) {
-      _id, title, slug, description, mainImage,
+      _id, title, slug, description, mainImage, video, videoUrl,
       initiative->{_id, title, slug},
       results, metrics, featured, publishedAt
     }`,
@@ -174,7 +178,7 @@ export async function getCases(): Promise<CaseStudy[]> {
 export async function getCase(slug: string): Promise<CaseStudy> {
     return client.fetch(
         `*[_type == "case" && slug.current == $slug][0] {
-      _id, title, slug, description, mainImage, body,
+      _id, title, slug, description, mainImage, video, videoUrl, body,
       initiative->{_id, title, slug},
       results, metrics, featured, publishedAt
     }`,

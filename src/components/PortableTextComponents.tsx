@@ -10,6 +10,21 @@ function fileUrl(ref: string): string {
     return `https://cdn.sanity.io/files/${sanityConfig.projectId}/${sanityConfig.dataset}/${id}.${ext}`;
 }
 
+// Convert a YouTube/Vimeo URL to an embeddable URL
+function getEmbedUrl(url: string): string | null {
+    // YouTube
+    const ytMatch = url.match(
+        /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+    );
+    if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`;
+
+    // Vimeo
+    const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+    if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+
+    return null;
+}
+
 const components: Partial<PortableTextReactComponents> = {
     types: {
         image: ({ value }) => {
@@ -87,6 +102,72 @@ const components: Partial<PortableTextReactComponents> = {
                     )}
                 </figure>
             );
+        },
+        video: ({ value }) => {
+            // Direct file upload
+            if (value?.file?.asset?._ref) {
+                const videoSrc = fileUrl(value.file.asset._ref);
+                return (
+                    <figure className="my-8">
+                        <div className="relative overflow-hidden rounded-xl border border-white/[0.04]">
+                            <video
+                                src={videoSrc}
+                                controls
+                                playsInline
+                                preload="metadata"
+                                className="w-full"
+                                style={{ maxHeight: "600px" }}
+                            />
+                        </div>
+                        {value.caption && (
+                            <figcaption className="mt-2 text-center text-[12px]" style={{ color: "rgb(140, 139, 135)" }}>{value.caption}</figcaption>
+                        )}
+                    </figure>
+                );
+            }
+
+            // External YouTube/Vimeo URL
+            if (value?.url) {
+                const embedUrl = getEmbedUrl(value.url);
+                if (embedUrl) {
+                    return (
+                        <figure className="my-8">
+                            <div className="relative aspect-video overflow-hidden rounded-xl border border-white/[0.04]">
+                                <iframe
+                                    src={embedUrl}
+                                    title={value.caption || "Video"}
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                    className="absolute inset-0 h-full w-full"
+                                    style={{ border: "none" }}
+                                />
+                            </div>
+                            {value.caption && (
+                                <figcaption className="mt-2 text-center text-[12px]" style={{ color: "rgb(140, 139, 135)" }}>{value.caption}</figcaption>
+                            )}
+                        </figure>
+                    );
+                }
+                // Fallback: link to the video
+                return (
+                    <figure className="my-8">
+                        <a
+                            href={value.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 rounded-xl border border-white/[0.04] bg-[rgb(25,26,35)] px-5 py-4 text-sm transition-all hover:border-[rgb(98,246,181)]/30"
+                            style={{ color: "rgb(98,246,181)" }}
+                        >
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <polygon points="5 3 19 12 5 21 5 3" />
+                            </svg>
+                            {value.caption || "Ver video"}
+                        </a>
+                    </figure>
+                );
+            }
+
+            return null;
         },
     },
     block: {

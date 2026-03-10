@@ -39,6 +39,19 @@ export default defineType({
             options: { hotspot: true },
         }),
         defineField({
+            name: "video",
+            title: "Video principal",
+            type: "file",
+            options: { accept: "video/*" },
+            description: "Sube un archivo de video directamente (MP4, MOV, WebM, etc.).",
+        }),
+        defineField({
+            name: "videoUrl",
+            title: "URL de video externo",
+            type: "url",
+            description: "Enlace a un video de YouTube o Vimeo (se mostrará como embed).",
+        }),
+        defineField({
             name: "body",
             title: "Contenido / Documentación",
             type: "array",
@@ -69,6 +82,30 @@ export default defineType({
                     },
                 },
                 { type: "image", options: { hotspot: true } },
+                {
+                    type: "object",
+                    name: "video",
+                    title: "Video",
+                    fields: [
+                        {
+                            name: "file",
+                            title: "Archivo de video",
+                            type: "file",
+                            options: { accept: "video/*" },
+                        },
+                        {
+                            name: "url",
+                            title: "URL de video externo",
+                            type: "url",
+                            description: "YouTube o Vimeo URL.",
+                        },
+                        {
+                            name: "caption",
+                            title: "Descripción",
+                            type: "string",
+                        },
+                    ],
+                },
             ],
         }),
         defineField({
